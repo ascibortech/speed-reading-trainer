@@ -5,9 +5,13 @@
  */
 import { Engine, registry } from "@srt/engine-core";
 import { pointerProvider } from "@srt/exercise-pointer";
+import { rsvpProvider } from "@srt/exercise-rsvp";
+import { schulteProvider } from "@srt/exercise-schulte";
 
 registry.register(pointerProvider);
-// Phase 2+: registry.register(rsvpProvider), schulteProvider, ...
+registry.register(rsvpProvider);
+registry.register(schulteProvider);
+// Phase 3+: comprehension, chunking, subvocalization, memorization ...
 
 export const engine = new Engine(registry);
 export { registry };

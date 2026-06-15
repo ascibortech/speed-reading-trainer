@@ -281,6 +281,117 @@ select {
   font-family: Georgia, "Times New Roman", serif;
 }
 
+/* RSVP */
+.srt-rsvp-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: 280px;
+}
+.srt-rsvp-tick {
+  width: 2px;
+  height: 14px;
+  background: #cbd5e1;
+}
+.srt-rsvp-row {
+  display: flex;
+  width: 100%;
+  font-size: 2.6rem;
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  letter-spacing: 0.02em;
+}
+.srt-rsvp-left {
+  flex: 1;
+  text-align: right;
+  white-space: pre;
+}
+.srt-rsvp-pivot {
+  color: #dc2626;
+}
+.srt-rsvp-right {
+  flex: 1;
+  text-align: left;
+  white-space: pre;
+}
+
+/* Schulte */
+.srt-schulte {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+.srt-schulte-target {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+.srt-schulte-grid {
+  gap: 6px;
+  width: min(100%, 420px);
+}
+.srt-schulte-cell {
+  aspect-ratio: 1;
+  min-height: 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+  background: #fff;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+}
+.srt-schulte-cell:hover:not(:disabled) {
+  background: #eff6ff;
+}
+.srt-schulte-cell.found {
+  background: #dcfce7;
+  color: #16a34a;
+  opacity: 0.5;
+}
+.srt-schulte-cell.wrong {
+  animation: srt-shake 0.25s;
+  border-color: #dc2626;
+}
+@keyframes srt-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+.srt-schulte-fixation {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 50%;
+  background: #dc2626;
+  pointer-events: none;
+}
+
+/* Progress coverage + per-exercise cards */
+.coverage {
+  margin: 0 0 1rem;
+}
+.exercise-progress {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  margin-bottom: 1rem;
+}
+.exercise-progress .mini {
+  background: var(--panel-2);
+  border-radius: 8px;
+  padding: 0.75rem;
+}
+.exercise-progress .mini h3 {
+  margin: 0 0 0.4rem;
+  font-size: 0.95rem;
+}
+
 /* Stats / progress */
 .stats {
   display: flex;

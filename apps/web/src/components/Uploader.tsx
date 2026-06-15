@@ -23,7 +23,7 @@ export function Uploader({ text, fileName, onParsed, onClear }: Props) {
       onParsed(parsed, file.name);
     } catch (err) {
       if (err instanceof UnsupportedFormatError) {
-        setError(`${err.message} (Phase 1 supports .txt; more formats are coming.)`);
+        setError(`${err.message} (Supported now: .txt and .pdf.)`);
       } else if (err instanceof EmptyTextError) {
         setError(err.message);
       } else {
@@ -48,12 +48,12 @@ export function Uploader({ text, fileName, onParsed, onClear }: Props) {
             disabled={busy}
             onClick={() => inputRef.current?.click()}
           >
-            {busy ? "Reading…" : "Choose a .txt file"}
+            {busy ? "Reading…" : "Choose a .txt or .pdf file"}
           </button>
           <input
             ref={inputRef}
             type="file"
-            accept=".txt,text/plain"
+            accept=".txt,text/plain,.pdf,application/pdf"
             hidden
             onChange={(e) => {
               const f = e.target.files?.[0];

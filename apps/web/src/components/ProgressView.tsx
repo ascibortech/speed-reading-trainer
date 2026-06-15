@@ -2,10 +2,16 @@ import type { SessionMetadata } from "@srt/contracts/metadata";
 
 interface Props {
   sessions: SessionMetadata[];
+  totalExercises: number;
 }
 
-/** Local progress view assembled from stored session metadata (system-design §6). */
-export function ProgressView({ sessions }: Props) {
+/**
+ * Local progress view (system-design §6) assembled from stored session metadata.
+ * Shows exercise coverage (a simple completion signal) and a per-exercise
+ * breakdown, plus the recent-session log. The authoritative speed×comprehension
+ * trajectory arrives with the exam path in Phase 3.
+ */
+export function ProgressView({ sessions, totalExercises }: Props) {
   if (sessions.length === 0) {
     return (
       <section className="card">
@@ -15,22 +21,37 @@ export function ProgressView({ sessions }: Props) {
     );
   }
 
-  const best = Math.max(...sessions.map((s) => s.wpm));
-  const latest = sessions[sessions.length - 1];
-  const avg =
-    sessions.reduce((sum, s) => sum + s.wpm, 0) / sessions.length;
+  const groups = groupBy(sessions, (s) => s.exerciseId);
+  const tried = Object.keys(groups).length;
 
   return (
     <section className="card">
       <h2>Progress</h2>
-      <div className="stats">
-        <Stat label="Sessions" value={String(sessions.length)} />
-        <Stat label="Latest WPM" value={Math.round(latest.wpm).toString()} />
-        <Stat label="Best WPM" value={Math.round(best).toString()} />
-        <Stat label="Avg WPM" value={Math.round(avg).toString()} />
-      </div>
 
-      <Sparkline values={sessions.map((s) => s.wpm)} />
+      <p className="coverage muted">
+        Explored <strong>{tried}</strong> of {totalExercises} exercises ·{" "}
+        <strong>{sessions.length}</strong> sessions total
+      </p>
+
+      <div className="exercise-progress">
+        {Object.entries(groups).map(([id, rows]) => {
+          const wpms = rows.map((r) => r.wpm);
+          return (
+            <div className="mini" key={id}>
+              <h3>{id}</h3>
+              <div className="stats">
+                <Stat label="Runs" value={String(rows.length)} />
+                <Stat label="Best" value={Math.round(Math.max(...wpms)).toString()} />
+                <Stat
+                  label="Latest"
+                  value={Math.round(rows[rows.length - 1].wpm).toString()}
+                />
+              </div>
+              <Sparkline values={wpms} />
+            </div>
+          );
+        })}
+      </div>
 
       <table className="sessions">
         <thead>
@@ -69,8 +90,8 @@ function Stat({ label, value }: { label: string; value: string }) {
 
 function Sparkline({ values }: { values: number[] }) {
   if (values.length < 2) return null;
-  const w = 280;
-  const h = 56;
+  const w = 200;
+  const h = 40;
   const max = Math.max(...values);
   const min = Math.min(...values);
   const range = max - min || 1;
@@ -91,6 +112,15 @@ function Sparkline({ values }: { values: number[] }) {
       />
     </svg>
   );
+}
+
+function groupBy<T>(items: T[], key: (t: T) => string): Record<string, T[]> {
+  const out: Record<string, T[]> = {};
+  for (const item of items) {
+    const k = key(item);
+    (out[k] ??= []).push(item);
+  }
+  return out;
 }
 
 function formatDuration(sec: number): string {

@@ -19,11 +19,11 @@ Two parallel systems: **session-based training lessons** (run on BYO text) and a
 **long-term exam path** (runs on curated, app-supplied passages) that benchmarks
 WPM × comprehension over time.
 
-**Status:** Phase 0 (GitHub factory) and Phase 1 (MVP) are implemented — pnpm +
-Turborepo monorepo, contracts/engine-core/storage/parsers packages, the
-Pointer/Pacer exercise, and the `apps/web` shell (local profiles, `.txt` upload,
-session runner, progress view, export/import). CI/CD + CodeQL + Dependabot wired.
-**Phase 2 (PDF parser, RSVP, Schulte, progress view polish) is the next step.**
+**Status:** Phases 0–2 implemented. Phase 0 (factory) + Phase 1 (MVP: Pointer,
+`.txt`, profiles, export/import) + Phase 2 (lazy `.pdf` parser via pdf.js, the
+**RSVP** and **Schulte** exercises, and a per-exercise/coverage progress view).
+CI/CD + CodeQL + Dependabot wired. **Phase 3 (exam path + comprehension + chunking
++ subvocalization) is the next step.**
 
 ## The three non-negotiables
 
@@ -120,11 +120,11 @@ migrations. IndexedDB stores `profiles`, `sessions`, `examRuns`, `progressIndex`
 Each phase is a GitHub Milestone; exit criteria gate the next. (Full detail in
 [architecture-plan §5](./docs/architecture-plan.md).)
 
-- **Phase 0** — GitHub factory: public repo, pnpm+Turborepo scaffold, CI/CD, Pages,
-  CodeQL/Dependabot, `packages/contracts`, devcontainer. *← next step.*
-- **Phase 1 (MVP)** — local profiles + IndexedDB + export/import + `.txt` parser +
+- **Phase 0** ✓ — GitHub factory: public repo, pnpm+Turborepo scaffold, CI/CD, Pages,
+  CodeQL/Dependabot, `packages/contracts`, devcontainer.
+- **Phase 1 (MVP)** ✓ — local profiles + IndexedDB + export/import + `.txt` parser +
   engine core + **Pointer/Pacer exercise**. Ships a usable standalone product.
-- **Phase 2** — `.pdf` parser, RSVP, Schulte, progress profile view.
+- **Phase 2** ✓ — lazy `.pdf` parser (pdf.js), RSVP, Schulte, progress profile view.
 - **Phase 3** — exam path + comprehension (cloze) + chunking + subvocalization.
 - **Phase 4** — memorization/retention + spaced repetition.
 - **Phase 5** — `.docx`/`.epub`/`.mobi`, hardening, optional in-browser LLM, a11y.

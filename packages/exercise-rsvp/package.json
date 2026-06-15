@@ -1,16 +1,13 @@
 {
-  "name": "@srt/parsers",
+  "name": "@srt/exercise-rsvp",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts",
-    "./txt": "./src/txt.ts",
-    "./pdf": "./src/pdf.ts"
+    ".": "./src/index.ts"
   },
   "dependencies": {
-    "@srt/contracts": "workspace:*",
-    "pdfjs-dist": "^4.10.38"
+    "@srt/contracts": "workspace:*"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

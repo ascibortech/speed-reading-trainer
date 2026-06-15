@@ -14,6 +14,8 @@
     "@srt/contracts": "workspace:*",
     "@srt/engine-core": "workspace:*",
     "@srt/exercise-pointer": "workspace:*",
+    "@srt/exercise-rsvp": "workspace:*",
+    "@srt/exercise-schulte": "workspace:*",
     "@srt/parsers": "workspace:*",
     "@srt/storage": "workspace:*",
     "react": "^18.3.1",
