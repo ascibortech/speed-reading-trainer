@@ -1,0 +1,14 @@
+{
+  "name": "speed-reading-trainer",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:20",
+  "features": {
+    "ghcr.io/devcontainers-contrib/features/pnpm:2": {}
+  },
+  "postCreateCommand": "pnpm install",
+  "forwardPorts": [5173],
+  "customizations": {
+    "vscode": {
+      "extensions": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode"]
+    }
+  }
+}

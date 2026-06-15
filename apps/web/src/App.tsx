@@ -1,0 +1,194 @@
+import { useEffect, useMemo, useState } from "react";
+import { defaultParams, type NormalizedText, type Params } from "@srt/contracts";
+import type { SessionMetadata } from "@srt/contracts/metadata";
+import { addSession, getSessions } from "@srt/storage";
+import { registry } from "./engine.js";
+import { ProfileGate } from "./components/ProfileGate.js";
+import { Uploader } from "./components/Uploader.js";
+import { Catalogue } from "./components/Catalogue.js";
+import { ParamControls } from "./components/ParamControls.js";
+import { SessionRunner } from "./components/SessionRunner.js";
+import { ProgressView } from "./components/ProgressView.js";
+import { ExportImport } from "./components/ExportImport.js";
+
+type Tab = "train" | "progress";
+
+export function App() {
+  const [username, setUsername] = useState<string | null>(null);
+  const [tab, setTab] = useState<Tab>("train");
+
+  const [text, setText] = useState<NormalizedText | null>(null);
+  const [fileName, setFileName] = useState<string | null>(null);
+
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [params, setParams] = useState<Params>({});
+  const [running, setRunning] = useState(false);
+
+  const [sessions, setSessions] = useState<SessionMetadata[]>([]);
+  const [result, setResult] = useState<SessionMetadata | null>(null);
+
+  const descriptors = useMemo(() => registry.list(), []);
+  const selected = descriptors.find((d) => d.id === selectedId) ?? null;
+
+  useEffect(() => {
+    if (username) void refreshSessions(username);
+  }, [username]);
+
+  async function refreshSessions(user: string) {
+    setSessions(await getSessions(user));
+  }
+
+  function selectExercise(id: string) {
+    setSelectedId(id);
+    const d = descriptors.find((x) => x.id === id);
+    if (d) setParams(defaultParams(d.paramSchema));
+    setResult(null);
+  }
+
+  async function handleComplete(meta: SessionMetadata) {
+    await addSession(meta);
+    setRunning(false);
+    setResult(meta);
+    if (username) await refreshSessions(username);
+  }
+
+  function switchProfile() {
+    setUsername(null);
+    setText(null);
+    setFileName(null);
+    setSelectedId(null);
+    setRunning(false);
+    setResult(null);
+    setSessions([]);
+  }
+
+  if (!username) return <ProfileGate onSelect={setUsername} />;
+
+  const canStart = selected && (!selected.needsText || text);
+
+  return (
+    <div className="app">
+      <header className="app-header">
+        <div className="brand">Speed Reading Trainer</div>
+        <div className="header-right">
+          <ExportImport
+            username={username}
+            onImported={() => void refreshSessions(username)}
+          />
+          <span className="profile-chip">
+            {username}
+            <button className="link" onClick={switchProfile}>
+              switch
+            </button>
+          </span>
+        </div>
+      </header>
+
+      <nav className="tabs">
+        <button
+          className={tab === "train" ? "active" : ""}
+          onClick={() => setTab("train")}
+        >
+          Train
+        </button>
+        <button
+          className={tab === "progress" ? "active" : ""}
+          onClick={() => setTab("progress")}
+        >
+          Progress
+        </button>
+      </nav>
+
+      <main>
+        {tab === "train" && !running && (
+          <>
+            <Uploader
+              text={text}
+              fileName={fileName}
+              onParsed={(t, name) => {
+                setText(t);
+                setFileName(name);
+              }}
+              onClear={() => {
+                setText(null);
+                setFileName(null);
+              }}
+            />
+
+            <Catalogue
+              exercises={descriptors}
+              selectedId={selectedId}
+              textLoaded={!!text}
+              onSelect={selectExercise}
+            />
+
+            {selected && (
+              <section className="card">
+                <h2>3 · Settings</h2>
+                <ParamControls
+                  schema={selected.paramSchema}
+                  params={params}
+                  onChange={setParams}
+                />
+                <button
+                  className="primary big"
+                  disabled={!canStart}
+                  onClick={() => {
+                    setResult(null);
+                    setRunning(true);
+                  }}
+                >
+                  Start
+                </button>
+                {!canStart && selected.needsText && (
+                  <p className="hint">Load a text file first.</p>
+                )}
+              </section>
+            )}
+
+            {result && (
+              <section className="card result">
+                <h2>Session saved ✓</h2>
+                <div className="stats">
+                  <div className="stat">
+                    <span className="stat-value">{Math.round(result.wpm)}</span>
+                    <span className="stat-label">WPM</span>
+                  </div>
+                  <div className="stat">
+                    <span className="stat-value">{result.wordsProcessed}</span>
+                    <span className="stat-label">words</span>
+                  </div>
+                  <div className="stat">
+                    <span className="stat-value">
+                      {Math.round(result.durationSec)}s
+                    </span>
+                    <span className="stat-label">duration</span>
+                  </div>
+                </div>
+              </section>
+            )}
+          </>
+        )}
+
+        {tab === "train" && running && selected && (
+          <SessionRunner
+            exerciseId={selected.id}
+            descriptor={selected}
+            text={text}
+            params={params}
+            username={username}
+            onComplete={handleComplete}
+            onCancel={() => setRunning(false)}
+          />
+        )}
+
+        {tab === "progress" && <ProgressView sessions={sessions} />}
+      </main>
+
+      <footer className="app-footer muted small">
+        Your text and progress stay on this device. Export to back up or move to
+        another browser.
+      </footer>
+    </div>
+  );
+}

@@ -1,0 +1,17 @@
+{
+  "name": "@srt/contracts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./text": "./src/text.ts",
+    "./metrics": "./src/metrics.ts",
+    "./exercise": "./src/exercise.ts",
+    "./metadata": "./src/metadata.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  }
+}

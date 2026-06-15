@@ -19,4 +19,23 @@ See [`/docs`](./docs):
 
 ## Status
 
-Pre-implementation. Architecture and delivery plan complete; Phase 0 (factory setup) is the next step.
+Phase 0 (GitHub factory) and Phase 1 (MVP) implemented: a pnpm + Turborepo monorepo with the engine core, plugin registry, IndexedDB storage + JSON export/import, a `.txt` parser, and the **Pointer/Pacer** exercise wired into a working web app (local profiles, upload, session runner, progress tracking). Phase 2 (PDF, RSVP, Schulte) is next.
+
+### Develop
+
+```bash
+pnpm install
+pnpm dev        # http://localhost:5173
+pnpm test && pnpm typecheck && pnpm lint
+```
+
+### Layout
+
+```
+apps/web                  # React SPA (the entire app → GitHub Pages)
+packages/contracts        # shared types: NormalizedText, MetricEvent, Exercise, metadata
+packages/engine-core      # registry, clock, metrics collector, session engine
+packages/storage          # IndexedDB + export/import + local profiles (metadata only)
+packages/parsers          # client-side document parsing (.txt now; .pdf/.docx/.epub/.mobi next)
+packages/exercise-pointer # the MVP Pointer/Pacer exercise plugin
+```
