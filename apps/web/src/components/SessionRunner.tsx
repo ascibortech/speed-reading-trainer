@@ -106,8 +106,8 @@ export function SessionRunner({
           ) : (
             <button onClick={resume}>Resume</button>
           )}
-          <button className="primary" onClick={stop}>
-            Finish &amp; save
+          <button className="primary" onClick={stop} title="Stop now and save what's measured so far">
+            Stop &amp; save
           </button>
           <button className="link" onClick={onCancel}>
             Discard

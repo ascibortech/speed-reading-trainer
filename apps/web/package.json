@@ -11,14 +11,19 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
+    "@srt/comprehension": "workspace:*",
     "@srt/contracts": "workspace:*",
     "@srt/engine-core": "workspace:*",
+    "@srt/exam-path": "workspace:*",
+    "@srt/exercise-chunking": "workspace:*",
+    "@srt/exercise-comprehension": "workspace:*",
     "@srt/exercise-pointer": "workspace:*",
     "@srt/exercise-rsvp": "workspace:*",
     "@srt/exercise-schulte": "workspace:*",
+    "@srt/exercise-subvocalization": "workspace:*",
     "@srt/parsers": "workspace:*",
     "@srt/storage": "workspace:*",
-    "react": "^18.3.1",
+    "react": "^19.2.0",
     "react-dom": "^19.2.7"
   }
 }

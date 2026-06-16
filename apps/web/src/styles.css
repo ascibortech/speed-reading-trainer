@@ -392,6 +392,82 @@ select {
   font-size: 0.95rem;
 }
 
+/* Chunking */
+.srt-chunk-pane {
+  font-family: Georgia, "Times New Roman", serif;
+  line-height: 2;
+}
+.srt-chunk-word {
+  border-radius: 3px;
+  transition: background 0.08s;
+}
+.srt-chunk-word.active {
+  background: #fde68a;
+  box-shadow: 0 0 0 3px #fde68a;
+}
+
+/* Comprehension + subvocalization (rendered on the white surface) */
+.srt-comp,
+.srt-comp-quiz,
+.srt-subvoc {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.srt-comp h3,
+.srt-comp-quiz h3,
+.srt-subvoc h3 {
+  color: #0f172a;
+}
+.srt-comp-pane {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.15rem;
+  line-height: 1.7;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+.srt-comp-q {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 0.6rem;
+}
+.srt-comp-prompt {
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0 0 0.5rem;
+}
+.srt-comp-options {
+  display: grid;
+  gap: 0.4rem;
+}
+.srt-comp-option {
+  text-align: left;
+  background: #fff;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+}
+.srt-comp-option:hover:not(:disabled) {
+  background: #eff6ff;
+}
+.srt-comp-option.chosen {
+  background: #dbeafe;
+  border-color: var(--accent);
+  outline: 2px solid var(--accent);
+}
+.srt-comp-quiz .submit {
+  margin-top: 0.5rem;
+}
+.srt-subvoc-hint {
+  color: #92400e;
+  font-weight: 600;
+}
+.srt-subvoc-summary {
+  color: #0f172a;
+}
+.srt-subvoc .field,
+.srt-subvoc .row {
+  color: #0f172a;
+}
+
 /* Stats / progress */
 .stats {
   display: flex;
