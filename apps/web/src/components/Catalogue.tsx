@@ -1,4 +1,5 @@
 import type { ExerciseDescriptor } from "@srt/contracts";
+import { useT } from "../i18n/index.js";
 
 interface Props {
   exercises: ExerciseDescriptor[];
@@ -7,19 +8,12 @@ interface Props {
   onSelect: (id: string) => void;
 }
 
-const PILLAR_LABEL: Record<string, string> = {
-  "eye-movement": "Eye movement",
-  "visual-span": "Visual span",
-  subvocalization: "Subvocalization",
-  comprehension: "Comprehension",
-  retention: "Retention",
-};
-
 /** Catalogue built entirely from the registry descriptors (system-design §3.2). */
 export function Catalogue({ exercises, selectedId, textLoaded, onSelect }: Props) {
+  const t = useT();
   return (
     <section className="card">
-      <h2>2 · Choose an exercise</h2>
+      <h2>{t("cat.heading")}</h2>
       <ul className="catalogue">
         {exercises.map((ex) => {
           const blocked = ex.needsText && !textLoaded;
@@ -29,15 +23,19 @@ export function Catalogue({ exercises, selectedId, textLoaded, onSelect }: Props
                 className={`exercise-card${selectedId === ex.id ? " selected" : ""}`}
                 disabled={blocked}
                 onClick={() => onSelect(ex.id)}
-                title={blocked ? "Load text first" : undefined}
+                title={blocked ? t("cat.loadFirst") : undefined}
               >
                 <div className="exercise-head">
-                  <strong>{ex.title}</strong>
-                  <span className={`badge stage-${ex.stage}`}>{ex.stage}</span>
+                  <strong>{t(`ex.${ex.id}.title`, ex.title)}</strong>
+                  <span className={`badge stage-${ex.stage}`}>
+                    {t(`stage.${ex.stage}`, ex.stage)}
+                  </span>
                 </div>
-                <p className="muted small">{ex.description}</p>
-                <span className="pillar">{PILLAR_LABEL[ex.pillar] ?? ex.pillar}</span>
-                {blocked && <span className="hint">needs text</span>}
+                <p className="muted small">
+                  {t(`ex.${ex.id}.desc`, ex.description)}
+                </p>
+                <span className="pillar">{t(`pillar.${ex.pillar}`, ex.pillar)}</span>
+                {blocked && <span className="hint">{t("cat.needsText")}</span>}
               </button>
             </li>
           );

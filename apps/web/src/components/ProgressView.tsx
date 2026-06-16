@@ -1,4 +1,5 @@
 import type { SessionMetadata } from "@srt/contracts/metadata";
+import { useT } from "../i18n/index.js";
 
 interface Props {
   sessions: SessionMetadata[];
@@ -12,11 +13,12 @@ interface Props {
  * trajectory arrives with the exam path in Phase 3.
  */
 export function ProgressView({ sessions, totalExercises }: Props) {
+  const t = useT();
   if (sessions.length === 0) {
     return (
       <section className="card">
-        <h2>Progress</h2>
-        <p className="muted">No sessions yet. Run an exercise to start tracking.</p>
+        <h2>{t("prog.heading")}</h2>
+        <p className="muted">{t("prog.empty")}</p>
       </section>
     );
   }
@@ -26,11 +28,14 @@ export function ProgressView({ sessions, totalExercises }: Props) {
 
   return (
     <section className="card">
-      <h2>Progress</h2>
+      <h2>{t("prog.heading")}</h2>
 
       <p className="coverage muted">
-        Explored <strong>{tried}</strong> of {totalExercises} exercises ·{" "}
-        <strong>{sessions.length}</strong> sessions total
+        {t("prog.coverage", undefined, {
+          tried,
+          total: totalExercises,
+          sessions: sessions.length,
+        })}
       </p>
 
       <div className="exercise-progress">
@@ -38,12 +43,12 @@ export function ProgressView({ sessions, totalExercises }: Props) {
           const wpms = rows.map((r) => r.wpm);
           return (
             <div className="mini" key={id}>
-              <h3>{id}</h3>
+              <h3>{t(`ex.${id}.title`, id)}</h3>
               <div className="stats">
-                <Stat label="Runs" value={String(rows.length)} />
-                <Stat label="Best" value={Math.round(Math.max(...wpms)).toString()} />
+                <Stat label={t("prog.runs")} value={String(rows.length)} />
+                <Stat label={t("prog.best")} value={Math.round(Math.max(...wpms)).toString()} />
                 <Stat
-                  label="Latest"
+                  label={t("prog.latest")}
                   value={Math.round(rows[rows.length - 1].wpm).toString()}
                 />
               </div>
@@ -56,18 +61,18 @@ export function ProgressView({ sessions, totalExercises }: Props) {
       <table className="sessions">
         <thead>
           <tr>
-            <th>Date</th>
-            <th>Exercise</th>
-            <th>WPM</th>
-            <th>Words</th>
-            <th>Duration</th>
+            <th>{t("col.date")}</th>
+            <th>{t("col.exercise")}</th>
+            <th>{t("col.wpm")}</th>
+            <th>{t("col.words")}</th>
+            <th>{t("col.duration")}</th>
           </tr>
         </thead>
         <tbody>
           {[...sessions].reverse().map((s) => (
             <tr key={s.sessionId}>
               <td>{new Date(s.startedAt).toLocaleString()}</td>
-              <td>{s.exerciseId}</td>
+              <td>{t(`ex.${s.exerciseId}.title`, s.exerciseId)}</td>
               <td>{Math.round(s.wpm)}</td>
               <td>{s.wordsProcessed.toLocaleString()}</td>
               <td>{formatDuration(s.durationSec)}</td>

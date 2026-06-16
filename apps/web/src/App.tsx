@@ -11,12 +11,17 @@ import { SessionRunner } from "./components/SessionRunner.js";
 import { ProgressView } from "./components/ProgressView.js";
 import { ExportImport } from "./components/ExportImport.js";
 import { ExamPanel } from "./exam/ExamPanel.js";
+import { Changelog } from "./components/Changelog.js";
+import { LanguageFlags, useT } from "./i18n/index.js";
+import { APP_VERSION } from "./changelog.js";
 
 type Tab = "train" | "exam" | "progress";
 
 export function App() {
+  const t = useT();
   const [username, setUsername] = useState<string | null>(null);
   const [tab, setTab] = useState<Tab>("train");
+  const [showChangelog, setShowChangelog] = useState(false);
 
   const [text, setText] = useState<NormalizedText | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
@@ -63,7 +68,24 @@ export function App() {
     setSessions([]);
   }
 
-  if (!username) return <ProfileGate onSelect={setUsername} />;
+  const footer = (
+    <footer className="app-footer">
+      <p className="muted small">{t("footer.privacy")}</p>
+      <button className="link version" onClick={() => setShowChangelog(true)}>
+        {t("changelog.link", undefined, { version: APP_VERSION })}
+      </button>
+    </footer>
+  );
+
+  if (!username) {
+    return (
+      <>
+        <ProfileGate onSelect={setUsername} />
+        {footer}
+        {showChangelog && <Changelog onClose={() => setShowChangelog(false)} />}
+      </>
+    );
+  }
 
   const canStart = selected && (!selected.needsText || text);
 
@@ -72,6 +94,7 @@ export function App() {
       <header className="app-header">
         <div className="brand">Speed Reading Trainer</div>
         <div className="header-right">
+          <LanguageFlags />
           <ExportImport
             username={username}
             onImported={() => void refreshSessions(username)}
@@ -79,7 +102,7 @@ export function App() {
           <span className="profile-chip">
             {username}
             <button className="link" onClick={switchProfile}>
-              switch
+              {t("header.switch")}
             </button>
           </span>
         </div>
@@ -90,19 +113,19 @@ export function App() {
           className={tab === "train" ? "active" : ""}
           onClick={() => setTab("train")}
         >
-          Train
+          {t("nav.train")}
         </button>
         <button
           className={tab === "exam" ? "active" : ""}
           onClick={() => setTab("exam")}
         >
-          Exam
+          {t("nav.exam")}
         </button>
         <button
           className={tab === "progress" ? "active" : ""}
           onClick={() => setTab("progress")}
         >
-          Progress
+          {t("nav.progress")}
         </button>
       </nav>
 
@@ -112,8 +135,8 @@ export function App() {
             <Uploader
               text={text}
               fileName={fileName}
-              onParsed={(t, name) => {
-                setText(t);
+              onParsed={(parsed, name) => {
+                setText(parsed);
                 setFileName(name);
               }}
               onClear={() => {
@@ -131,7 +154,7 @@ export function App() {
 
             {selected && (
               <section className="card">
-                <h2>3 · Settings</h2>
+                <h2>{t("settings.heading")}</h2>
                 <ParamControls
                   schema={selected.paramSchema}
                   params={params}
@@ -145,31 +168,31 @@ export function App() {
                     setRunning(true);
                   }}
                 >
-                  Start
+                  {t("settings.start")}
                 </button>
                 {!canStart && selected.needsText && (
-                  <p className="hint">Load a text file first.</p>
+                  <p className="hint">{t("settings.loadFirst")}</p>
                 )}
               </section>
             )}
 
             {result && (
               <section className="card result">
-                <h2>Session saved ✓</h2>
+                <h2>{t("result.saved")}</h2>
                 <div className="stats">
                   <div className="stat">
                     <span className="stat-value">{Math.round(result.wpm)}</span>
-                    <span className="stat-label">WPM</span>
+                    <span className="stat-label">{t("result.wpm")}</span>
                   </div>
                   <div className="stat">
                     <span className="stat-value">{result.wordsProcessed}</span>
-                    <span className="stat-label">words</span>
+                    <span className="stat-label">{t("result.words")}</span>
                   </div>
                   <div className="stat">
                     <span className="stat-value">
                       {Math.round(result.durationSec)}s
                     </span>
-                    <span className="stat-label">duration</span>
+                    <span className="stat-label">{t("result.duration")}</span>
                   </div>
                 </div>
               </section>
@@ -196,10 +219,8 @@ export function App() {
         )}
       </main>
 
-      <footer className="app-footer muted small">
-        Your text and progress stay on this device. Export to back up or move to
-        another browser.
-      </footer>
+      {footer}
+      {showChangelog && <Changelog onClose={() => setShowChangelog(false)} />}
     </div>
   );
 }

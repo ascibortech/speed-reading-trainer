@@ -6,6 +6,7 @@ import {
   ProfileExistsError,
   unlockProfile,
 } from "@srt/storage";
+import { LanguageFlags, useT } from "../i18n/index.js";
 
 interface Props {
   onSelect: (username: string) => void;
@@ -16,6 +17,7 @@ interface Props {
  * the optional passphrase is a SOFT LOCK, not access control — stated plainly.
  */
 export function ProfileGate({ onSelect }: Props) {
+  const t = useT();
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [mode, setMode] = useState<"select" | "create">("select");
   const [username, setUsername] = useState("");
@@ -38,8 +40,8 @@ export function ProfileGate({ onSelect }: Props) {
     } catch (err) {
       setError(
         err instanceof ProfileExistsError
-          ? err.message
-          : "Could not create profile.",
+          ? t("gate.errExists", undefined, { name: username.trim() })
+          : t("gate.errCreate"),
       );
     }
   }
@@ -49,20 +51,20 @@ export function ProfileGate({ onSelect }: Props) {
     if (!hasPass) return onSelect(name);
     const ok = await unlockProfile(name, passphrase);
     if (ok) onSelect(name);
-    else setError("Incorrect passphrase.");
+    else setError(t("gate.errPass"));
   }
 
   return (
     <div className="card gate">
+      <div className="gate-top">
+        <LanguageFlags />
+      </div>
       <h1>Speed Reading Trainer</h1>
-      <p className="muted">
-        Train on your own text — parsed and used entirely in your browser. Nothing
-        you upload ever leaves this device.
-      </p>
+      <p className="muted">{t("gate.intro")}</p>
 
       {mode === "select" && profiles.length > 0 && (
         <>
-          <h2>Choose a profile</h2>
+          <h2>{t("gate.choose")}</h2>
           <ul className="profile-list">
             {profiles.map((p) => (
               <li key={p.username}>
@@ -78,7 +80,7 @@ export function ProfileGate({ onSelect }: Props) {
           </ul>
           {profiles.some((p) => p.passphraseHash) && (
             <label className="field">
-              Passphrase (for locked profiles)
+              {t("gate.passLocked")}
               <input
                 type="password"
                 value={passphrase}
@@ -88,16 +90,16 @@ export function ProfileGate({ onSelect }: Props) {
             </label>
           )}
           <button className="link" onClick={() => setMode("create")}>
-            + New profile
+            {t("gate.new")}
           </button>
         </>
       )}
 
       {mode === "create" && (
         <form onSubmit={handleCreate}>
-          <h2>New profile</h2>
+          <h2>{t("gate.newTitle")}</h2>
           <label className="field">
-            Username (not an email)
+            {t("gate.username")}
             <input
               value={username}
               onChange={(e) => setUsername(e.target.value)}
@@ -106,8 +108,8 @@ export function ProfileGate({ onSelect }: Props) {
             />
           </label>
           <label className="field">
-            Passphrase <span className="muted">(optional — a soft local lock,
-            not security)</span>
+            {t("gate.passphrase")}{" "}
+            <span className="muted">{t("gate.passHint")}</span>
             <input
               type="password"
               value={passphrase}
@@ -117,7 +119,7 @@ export function ProfileGate({ onSelect }: Props) {
           </label>
           <div className="row">
             <button className="primary" type="submit">
-              Create
+              {t("gate.create")}
             </button>
             {profiles.length > 0 && (
               <button
@@ -125,7 +127,7 @@ export function ProfileGate({ onSelect }: Props) {
                 className="link"
                 onClick={() => setMode("select")}
               >
-                Back
+                {t("gate.back")}
               </button>
             )}
           </div>

@@ -1,4 +1,5 @@
 import type { Params, ParamSchema } from "@srt/contracts";
+import { useT } from "../i18n/index.js";
 
 interface Props {
   schema: ParamSchema;
@@ -8,6 +9,7 @@ interface Props {
 
 /** Renders an exercise's declared param schema (system-design §5). */
 export function ParamControls({ schema, params, onChange }: Props) {
+  const t = useT();
   function set(key: string, value: number | string | boolean) {
     onChange({ ...params, [key]: value });
   }
@@ -17,8 +19,8 @@ export function ParamControls({ schema, params, onChange }: Props) {
       {schema.map((f) => (
         <label key={f.key} className="field">
           <span>
-            {f.label}
-            {f.unit && <span className="muted"> ({f.unit})</span>}
+            {t(`param.${f.key}`, f.label)}
+            {f.unit && <span className="muted"> ({t(`unit.${f.key}`, f.unit)})</span>}
           </span>
 
           {f.type === "number" && (
@@ -42,7 +44,7 @@ export function ParamControls({ schema, params, onChange }: Props) {
             >
               {f.options?.map((o) => (
                 <option key={o.value} value={o.value}>
-                  {o.label}
+                  {t(`opt.${f.key}.${o.value}`, o.label)}
                 </option>
               ))}
             </select>
