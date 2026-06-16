@@ -182,7 +182,9 @@ export function App() {
           />
         )}
 
-        {tab === "progress" && <ProgressView sessions={sessions} />}
+        {tab === "progress" && (
+          <ProgressView sessions={sessions} totalExercises={descriptors.length} />
+        )}
       </main>
 
       <footer className="app-footer muted small">
