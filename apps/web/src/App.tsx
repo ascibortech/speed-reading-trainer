@@ -10,8 +10,9 @@ import { ParamControls } from "./components/ParamControls.js";
 import { SessionRunner } from "./components/SessionRunner.js";
 import { ProgressView } from "./components/ProgressView.js";
 import { ExportImport } from "./components/ExportImport.js";
+import { ExamPanel } from "./exam/ExamPanel.js";
 
-type Tab = "train" | "progress";
+type Tab = "train" | "exam" | "progress";
 
 export function App() {
   const [username, setUsername] = useState<string | null>(null);
@@ -90,6 +91,12 @@ export function App() {
           onClick={() => setTab("train")}
         >
           Train
+        </button>
+        <button
+          className={tab === "exam" ? "active" : ""}
+          onClick={() => setTab("exam")}
+        >
+          Exam
         </button>
         <button
           className={tab === "progress" ? "active" : ""}
@@ -181,6 +188,8 @@ export function App() {
             onCancel={() => setRunning(false)}
           />
         )}
+
+        {tab === "exam" && <ExamPanel username={username} />}
 
         {tab === "progress" && (
           <ProgressView sessions={sessions} totalExercises={descriptors.length} />
