@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import type { ProgressExport } from "@srt/contracts/metadata";
 import { exportProgressJson, importProgress } from "@srt/storage";
+import { useT } from "../i18n/index.js";
 
 interface Props {
   username: string;
@@ -13,6 +14,7 @@ interface Props {
  * account recovery. Metadata only — the text boundary guarantees no user text.
  */
 export function ExportImport({ username, onImported }: Props) {
+  const t = useT();
   const inputRef = useRef<HTMLInputElement>(null);
   const [msg, setMsg] = useState<string | null>(null);
 
@@ -25,7 +27,7 @@ export function ExportImport({ username, onImported }: Props) {
     a.download = `speed-reading-${username}.json`;
     a.click();
     URL.revokeObjectURL(url);
-    setMsg("Progress exported.");
+    setMsg(t("ie.exported"));
   }
 
   async function handleImport(file: File) {
@@ -33,19 +35,17 @@ export function ExportImport({ username, onImported }: Props) {
     try {
       const doc = JSON.parse(await file.text()) as ProgressExport;
       await importProgress(doc);
-      setMsg("Progress imported.");
+      setMsg(t("ie.imported"));
       onImported();
     } catch {
-      setMsg("Could not import that file.");
+      setMsg(t("ie.errImport"));
     }
   }
 
   return (
     <div className="export-import">
-      <button onClick={handleExport} title="Download a backup of your progress">
-        ⭳ Export my progress
-      </button>
-      <button onClick={() => inputRef.current?.click()}>⭱ Import</button>
+      <button onClick={handleExport}>{t("header.export")}</button>
+      <button onClick={() => inputRef.current?.click()}>{t("header.import")}</button>
       <input
         ref={inputRef}
         type="file"

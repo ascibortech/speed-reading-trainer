@@ -12,6 +12,7 @@ import {
   type PassageResult,
 } from "@srt/exam-path";
 import { scoreAnswers, type AnsweredQuestion } from "@srt/comprehension";
+import { useT, type Translate } from "../i18n/index.js";
 
 interface Props {
   username: string;
@@ -26,6 +27,7 @@ type Mode = "idle" | "running" | "summary";
  * speed × comprehension trajectory over time.
  */
 export function ExamPanel({ username }: Props) {
+  const t = useT();
   const [runs, setRuns] = useState<ExamRun[]>([]);
   const [mode, setMode] = useState<Mode>("idle");
   const [index, setIndex] = useState(0);
@@ -75,12 +77,18 @@ export function ExamPanel({ username }: Props) {
   if (mode === "running") {
     return (
       <section className="card">
-        <ExamProgressBar index={index} total={EXAM_PASSAGES.length} />
+        <p className="muted small">
+          {t("exam.passageOf", undefined, {
+            n: index + 1,
+            total: EXAM_PASSAGES.length,
+          })}
+        </p>
         <PassageStep
           key={index}
           passage={EXAM_PASSAGES[index]}
           n={index + 1}
           total={EXAM_PASSAGES.length}
+          t={t}
           onDone={onPassageDone}
         />
       </section>
@@ -89,39 +97,40 @@ export function ExamPanel({ username }: Props) {
 
   return (
     <section className="card">
-      <h2>Exam path</h2>
+      <h2>{t("exam.heading")}</h2>
       <p className="muted small">
-        A fixed benchmark on curated passages — separate from training. Re-take it
-        every {RETEST_MIN_DAYS}–42 days to chart real progress.
+        {t("exam.intro", undefined, { min: RETEST_MIN_DAYS })}
       </p>
 
       {mode === "summary" && lastRun && (
         <div className="result" style={{ padding: "0.75rem", marginBottom: "1rem" }}>
-          <strong>{lastRun.isBaseline ? "Baseline" : "Re-test"} complete ✓</strong>
+          <strong>
+            {lastRun.isBaseline ? t("exam.baselineDone") : t("exam.retestDone")}
+          </strong>
           <div className="stats">
-            <Stat label="Mean WPM" value={Math.round(lastRun.meanWpm).toString()} />
+            <Stat label={t("exam.meanWpm")} value={Math.round(lastRun.meanWpm).toString()} />
             <Stat
-              label="Comprehension"
+              label={t("exam.comprehension")}
               value={`${Math.round(lastRun.meanComprehensionPct)}%`}
             />
-            <Stat label="Efficiency" value={efficiency(lastRun).toString()} />
+            <Stat label={t("exam.efficiency")} value={efficiency(lastRun).toString()} />
           </div>
         </div>
       )}
 
       {!hasBaseline ? (
         <button className="primary big" onClick={start}>
-          Start baseline exam ({EXAM_PASSAGES.length} passages)
+          {t("exam.startBaseline", undefined, { n: EXAM_PASSAGES.length })}
         </button>
       ) : (
         <>
-          <Trajectory runs={runs} />
+          <Trajectory runs={runs} t={t} />
           <p className="muted small">
-            {days !== null && `Last exam ${days} day${days === 1 ? "" : "s"} ago. `}
-            {due ? "A re-test is due." : "Re-test not due yet."}
+            {days !== null && `${t("exam.lastExam", undefined, { days })} `}
+            {due ? t("exam.due") : t("exam.notDue")}
           </p>
           <button className="primary big" onClick={start}>
-            {due ? "Start re-test" : "Re-test anyway"}
+            {due ? t("exam.startRetest") : t("exam.retestAnyway")}
           </button>
         </>
       )}
@@ -133,11 +142,13 @@ function PassageStep({
   passage,
   n,
   total,
+  t,
   onDone,
 }: {
   passage: ExamPassage;
   n: number;
   total: number;
+  t: Translate;
   onDone: (r: PassageResult) => void;
 }) {
   const [phase, setPhase] = useState<"read" | "quiz">("read");
@@ -170,12 +181,12 @@ function PassageStep({
     return (
       <div className="srt-comp">
         <h3>
-          Passage {n} of {total}: {passage.title}
+          {t("exam.passageHead", undefined, { n, total, title: passage.title })}
         </h3>
-        <p className="muted small">Read at a natural pace, then continue.</p>
+        <p className="muted small">{t("exam.readNatural")}</p>
         <div className="srt-comp-pane">{passage.text}</div>
         <button className="primary" onClick={finishReading}>
-          I've finished reading
+          {t("exam.finishedReading")}
         </button>
       </div>
     );
@@ -184,9 +195,7 @@ function PassageStep({
   const allAnswered = selections.every((s) => s >= 0);
   return (
     <div className="srt-comp-quiz">
-      <h3>
-        Questions — passage {n} of {total}
-      </h3>
+      <h3>{t("exam.questionsHead", undefined, { n, total })}</h3>
       {passage.questions.map((q, qi) => (
         <div className="srt-comp-q" key={q.id}>
           <p className="srt-comp-prompt">
@@ -208,30 +217,30 @@ function PassageStep({
         </div>
       ))}
       <button className="primary submit" disabled={!allAnswered} onClick={submit}>
-        {n < total ? "Next passage" : "Finish exam"}
+        {n < total ? t("exam.next") : t("exam.finish")}
       </button>
     </div>
   );
 }
 
-function Trajectory({ runs }: { runs: ExamRun[] }) {
+function Trajectory({ runs, t }: { runs: ExamRun[]; t: Translate }) {
   const ordered = [...runs].sort((a, b) => a.date.localeCompare(b.date));
   return (
     <table className="sessions">
       <thead>
         <tr>
-          <th>Date</th>
-          <th>Type</th>
-          <th>WPM</th>
-          <th>Comp.</th>
-          <th>Efficiency</th>
+          <th>{t("col.date")}</th>
+          <th>{t("col.type")}</th>
+          <th>{t("col.wpm")}</th>
+          <th>{t("col.comp")}</th>
+          <th>{t("col.efficiency")}</th>
         </tr>
       </thead>
       <tbody>
         {ordered.map((r) => (
           <tr key={r.examRunId}>
             <td>{new Date(r.date).toLocaleDateString()}</td>
-            <td>{r.isBaseline ? "Baseline" : "Re-test"}</td>
+            <td>{r.isBaseline ? t("exam.baseline") : t("exam.retest")}</td>
             <td>{Math.round(r.meanWpm)}</td>
             <td>{Math.round(r.meanComprehensionPct)}%</td>
             <td>{efficiency(r)}</td>
@@ -239,14 +248,6 @@ function Trajectory({ runs }: { runs: ExamRun[] }) {
         ))}
       </tbody>
     </table>
-  );
-}
-
-function ExamProgressBar({ index, total }: { index: number; total: number }) {
-  return (
-    <p className="muted small">
-      Passage {index + 1} of {total}
-    </p>
   );
 }
 

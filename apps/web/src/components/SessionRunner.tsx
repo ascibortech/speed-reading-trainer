@@ -8,6 +8,7 @@ import type {
 import type { SessionMetadata } from "@srt/contracts/metadata";
 import type { RunningSession, SessionState } from "@srt/engine-core";
 import { engine } from "../engine.js";
+import { useI18n } from "../i18n/index.js";
 
 interface Props {
   exerciseId: string;
@@ -33,6 +34,7 @@ export function SessionRunner({
   onComplete,
   onCancel,
 }: Props) {
+  const { t } = useI18n();
   const surfaceRef = useRef<HTMLDivElement>(null);
   const sessionRef = useRef<RunningSession | null>(null);
   const [state, setState] = useState<SessionState>("running");
@@ -61,6 +63,7 @@ export function SessionRunner({
         difficulty: 1,
         params,
         surface,
+        t,
         onComplete: (meta) => {
           sessionRef.current = null;
           onComplete(meta);
@@ -99,18 +102,18 @@ export function SessionRunner({
   return (
     <section className="card runner">
       <div className="runner-head">
-        <h2>{descriptor.title}</h2>
+        <h2>{t(`ex.${descriptor.id}.title`, descriptor.title)}</h2>
         <div className="row">
           {state === "running" ? (
-            <button onClick={pause}>Pause</button>
+            <button onClick={pause}>{t("runner.pause")}</button>
           ) : (
-            <button onClick={resume}>Resume</button>
+            <button onClick={resume}>{t("runner.resume")}</button>
           )}
-          <button className="primary" onClick={stop} title="Stop now and save what's measured so far">
-            Stop &amp; save
+          <button className="primary" onClick={stop}>
+            {t("runner.stop")}
           </button>
           <button className="link" onClick={onCancel}>
-            Discard
+            {t("runner.discard")}
           </button>
         </div>
       </div>

@@ -169,6 +169,11 @@ select {
   max-width: 440px;
   margin: 8vh auto;
 }
+.gate-top {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.5rem;
+}
 .profile-list {
   list-style: none;
   padding: 0;
@@ -512,4 +517,74 @@ select {
 .app-footer {
   text-align: center;
   padding: 1.5rem 0;
+}
+.app-footer .version {
+  font-size: 0.8rem;
+}
+
+/* Language flags */
+.lang-flags {
+  display: flex;
+  gap: 0.15rem;
+}
+.flag {
+  min-height: auto;
+  padding: 0.25rem 0.4rem;
+  font-size: 1.1rem;
+  line-height: 1;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  filter: grayscale(1) opacity(0.55);
+}
+.flag:hover:not(:disabled) {
+  background: var(--panel-2);
+  filter: none;
+}
+.flag.active {
+  filter: none;
+  border-color: var(--accent);
+}
+
+/* Modal + changelog */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 50;
+}
+.modal {
+  background: var(--panel);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  max-width: 560px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+.changelog-entry {
+  border-top: 1px solid #334155;
+  padding: 0.6rem 0;
+}
+.changelog-ver {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+.changelog ul {
+  margin: 0.4rem 0 0;
+  padding-left: 1.2rem;
+}
+.changelog li {
+  margin: 0.2rem 0;
 }

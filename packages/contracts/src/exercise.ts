@@ -31,6 +31,17 @@ export interface GazeSample {
 }
 export type GazeStream = AsyncIterable<GazeSample>;
 
+/**
+ * Localized-string lookup the host app supplies. Exercises call it with a stable
+ * key and an English fallback so they render in the user's language without the
+ * core knowing any specific language. `{var}` placeholders are interpolated.
+ */
+export type Translate = (
+  key: string,
+  fallback?: string,
+  vars?: Record<string, string | number>,
+) => string;
+
 export interface ExerciseContext {
   /** In-memory text to operate on. Never persist or transmit it. */
   text: NormalizedText;
@@ -41,6 +52,8 @@ export interface ExerciseContext {
   emit(e: MetricEvent): void;
   /** Signal the exercise has finished; the engine finalizes metadata. */
   complete(): void;
+  /** Translate a UI string (key + English fallback). Defaults to the fallback. */
+  t: Translate;
   /** Optional capabilities the core may expose (future-proofing, kickoff §8). */
   capabilities: { eyeTracking?: GazeStream };
 }

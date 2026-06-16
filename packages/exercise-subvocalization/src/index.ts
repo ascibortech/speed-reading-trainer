@@ -72,7 +72,7 @@ class SubvocalizationExercise implements Exercise {
   start(): void {
     this.renderRead(
       "baselineRead",
-      "Read normally — no technique",
+      this.ctx.t("subvoc.baselineTitle", "Read normally — no technique"),
       this.firstHalf,
     );
   }
@@ -93,8 +93,10 @@ class SubvocalizationExercise implements Exercise {
     wrap.appendChild(el("h3", "")).textContent = title;
 
     if (phase === "techniqueRead") {
-      wrap.appendChild(el("p", "srt-subvoc-hint")).textContent =
-        TECHNIQUE_HINT[this.technique] ?? "";
+      wrap.appendChild(el("p", "srt-subvoc-hint")).textContent = this.ctx.t(
+        `subvoc.hint.${this.technique}`,
+        TECHNIQUE_HINT[this.technique] ?? "",
+      );
     }
 
     const pane = el("div", "srt-comp-pane");
@@ -103,7 +105,7 @@ class SubvocalizationExercise implements Exercise {
 
     const done = document.createElement("button");
     done.className = "primary";
-    done.textContent = "Done reading";
+    done.textContent = this.ctx.t("subvoc.done", "Done reading");
     done.addEventListener("click", () => this.onSegmentDone(phase, words.length));
     wrap.appendChild(done);
 
@@ -119,7 +121,7 @@ class SubvocalizationExercise implements Exercise {
       this.ctx.emit({ t: "custom", key: "baselineWpm", value: wpm });
       this.renderRead(
         "techniqueRead",
-        "Now read with your technique",
+        this.ctx.t("subvoc.techniqueTitle", "Now read with your technique"),
         this.secondHalf,
       );
     } else {
@@ -133,15 +135,28 @@ class SubvocalizationExercise implements Exercise {
     const root = this.ctx.surface.root;
     root.replaceChildren();
     const wrap = el("div", "srt-subvoc");
-    wrap.appendChild(el("h3", "")).textContent = "How did it go?";
+    wrap.appendChild(el("h3", "")).textContent = this.ctx.t(
+      "subvoc.report",
+      "How did it go?",
+    );
 
     const summary = el("p", "srt-subvoc-summary");
     const delta = round(this.techniqueWpm - this.baselineWpm);
-    summary.textContent = `Baseline ${this.baselineWpm} WPM → with technique ${this.techniqueWpm} WPM (${delta >= 0 ? "+" : ""}${delta}).`;
+    summary.textContent = this.ctx.t(
+      "subvoc.summary",
+      "Baseline {b} WPM → with technique {t} WPM ({d}).",
+      {
+        b: this.baselineWpm,
+        t: this.techniqueWpm,
+        d: `${delta >= 0 ? "+" : ""}${delta}`,
+      },
+    );
     wrap.appendChild(summary);
 
     const diffLabel = el("label", "field");
-    diffLabel.appendChild(document.createTextNode("Difficulty (1–10)"));
+    diffLabel.appendChild(
+      document.createTextNode(this.ctx.t("subvoc.difficulty", "Difficulty (1–10)")),
+    );
     const diff = document.createElement("input");
     diff.type = "range";
     diff.min = "1";
@@ -154,12 +169,15 @@ class SubvocalizationExercise implements Exercise {
     const comp = document.createElement("input");
     comp.type = "checkbox";
     comp.checked = true;
-    compLabel.append(comp, document.createTextNode(" I maintained comprehension"));
+    compLabel.append(
+      comp,
+      document.createTextNode(this.ctx.t("subvoc.maintained", " I maintained comprehension")),
+    );
     wrap.appendChild(compLabel);
 
     const finish = document.createElement("button");
     finish.className = "primary";
-    finish.textContent = "Finish & save";
+    finish.textContent = this.ctx.t("subvoc.finish", "Finish & save");
     finish.addEventListener("click", () => {
       this.ctx.emit({ t: "custom", key: "difficulty", value: Number(diff.value) });
       this.ctx.emit({ t: "custom", key: "speedDeltaWpm", value: delta });

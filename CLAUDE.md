@@ -24,9 +24,13 @@ WPM × comprehension over time.
 view) + Phase 3 (the **exam path** subsystem with curated passages + hand-authored
 questions producing `ExamRun` trajectories; client-side **comprehension** question
 generation; the **comprehension**, **chunking**, and **subvocalization** exercises
-— all four kickoff pillars now represented). Runs on React 19. CI/CD + CodeQL +
-Dependabot wired. **Phase 4 (memorization / retention + spaced repetition) is the
-next step.**
+— all four kickoff pillars now represented). Runs on React 19. **Bilingual UI
+(English / Polish)** via a custom i18n layer (`apps/web/src/i18n`, flag switcher,
+choice persisted to `localStorage`), plus in-app **versioning + changelog**
+(`apps/web/src/changelog.ts`, shown from the footer). Exercises localize their own
+DOM strings through `ctx.t(key, englishFallback)` on the Exercise contract. CI/CD +
+CodeQL + Dependabot wired. **Phase 4 (memorization / retention + spaced repetition)
+is the next step.**
 
 ## The three non-negotiables
 

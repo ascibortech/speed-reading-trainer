@@ -93,7 +93,7 @@ class SchulteExercise implements Exercise {
 
     const label = document.createElement("div");
     label.className = "srt-schulte-target";
-    label.textContent = `Find: 1`;
+    label.textContent = ctx.t("schulte.find", "Find: {n}", { n: 1 });
     this.targetLabel = label;
 
     const grid = document.createElement("div");
@@ -154,7 +154,10 @@ class SchulteExercise implements Exercise {
     cell.classList.add("found");
     cell.disabled = true;
     this.target += 1;
-    if (this.targetLabel) this.targetLabel.textContent = `Find: ${this.target}`;
+    if (this.targetLabel)
+      this.targetLabel.textContent = this.ctx.t("schulte.find", "Find: {n}", {
+        n: this.target,
+      });
 
     this.ctx.emit({
       t: "progress",
@@ -168,7 +171,8 @@ class SchulteExercise implements Exercise {
       this.ctx.emit({ t: "custom", key: "completionSec", value: round(sec) });
       // cells/min as a search-rate proxy (no text → WPM is not literal words).
       this.ctx.emit({ t: "wpm", value: round(this.total / (sec / 60)) });
-      if (this.targetLabel) this.targetLabel.textContent = "Done ✓";
+      if (this.targetLabel)
+        this.targetLabel.textContent = this.ctx.t("schulte.done", "Done ✓");
       this.ctx.complete();
     }
   }

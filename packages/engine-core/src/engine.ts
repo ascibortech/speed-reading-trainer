@@ -13,11 +13,17 @@ import type {
   NormalizedText,
   Params,
   RenderSurface,
+  Translate,
 } from "@srt/contracts";
 import type { SessionMetadata, Stage } from "@srt/contracts/metadata";
 import { realClock, type Clock } from "./clock.js";
 import { MetricsCollector } from "./metrics-collector.js";
 import type { ExerciseRegistry } from "./registry.js";
+
+const defaultTranslate: Translate = (_key, fallback, vars) => {
+  const s = fallback ?? _key;
+  return vars ? s.replace(/\{(\w+)\}/g, (_, k) => (k in vars ? String(vars[k]) : `{${k}}`)) : s;
+};
 
 export interface RunOptions {
   username: string;
@@ -26,6 +32,8 @@ export interface RunOptions {
   params: Params;
   surface: RenderSurface;
   clock?: Clock;
+  /** Optional localized-string lookup; defaults to the English fallback. */
+  t?: Translate;
   /** Called once with the finalized record when the session completes/stops. */
   onComplete: (metadata: SessionMetadata) => void;
 }
@@ -113,6 +121,7 @@ export class Engine {
       clock,
       emit: (e) => collector.handle(e),
       complete: () => session.stop(),
+      t: opts.t ?? defaultTranslate,
       capabilities: {},
     };
 

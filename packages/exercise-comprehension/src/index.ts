@@ -83,7 +83,7 @@ class ComprehensionExercise implements Exercise {
 
     const done = document.createElement("button");
     done.className = "primary";
-    done.textContent = "I've finished reading";
+    done.textContent = this.ctx.t("comp.finishedReading", "I've finished reading");
     done.addEventListener("click", () => this.onFinishedReading());
 
     wrap.append(pane, done);
@@ -109,7 +109,7 @@ class ComprehensionExercise implements Exercise {
     const root = this.ctx.surface.root;
     root.replaceChildren();
     const wrap = el("div", "srt-comp-quiz");
-    wrap.appendChild(el("h3", "")).textContent = "Questions";
+    wrap.appendChild(el("h3", "")).textContent = this.ctx.t("comp.questions", "Questions");
 
     this.questions.forEach((q, qi) => {
       const block = el("div", "srt-comp-q");
@@ -135,7 +135,7 @@ class ComprehensionExercise implements Exercise {
 
     const submit = document.createElement("button");
     submit.className = "primary submit";
-    submit.textContent = "Submit answers";
+    submit.textContent = this.ctx.t("comp.submit", "Submit answers");
     submit.disabled = true;
     submit.addEventListener("click", () => this.onSubmit());
     wrap.appendChild(submit);
