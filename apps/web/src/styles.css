@@ -473,6 +473,57 @@ select {
   color: #0f172a;
 }
 
+/* Memorization */
+.srt-mem-recall {
+  width: 100%;
+  font: inherit;
+  padding: 0.6rem 0.7rem;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #0f172a;
+  resize: vertical;
+}
+.srt-mem-chips {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.srt-mem-chip {
+  text-align: left;
+  background: #fff;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+}
+.srt-mem-chip.picked {
+  background: #dcfce7;
+  opacity: 0.55;
+}
+
+/* Review list (spaced repetition) */
+.review-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.review-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--panel-2);
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+}
+.review-main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
 /* Stats / progress */
 .stats {
   display: flex;

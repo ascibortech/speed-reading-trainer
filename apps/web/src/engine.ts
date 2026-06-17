@@ -10,6 +10,7 @@ import { schulteProvider } from "@srt/exercise-schulte";
 import { chunkingProvider } from "@srt/exercise-chunking";
 import { comprehensionProvider } from "@srt/exercise-comprehension";
 import { subvocalizationProvider } from "@srt/exercise-subvocalization";
+import { memorizationProvider } from "@srt/exercise-memorization";
 
 registry.register(pointerProvider);
 registry.register(rsvpProvider);
@@ -17,7 +18,7 @@ registry.register(schulteProvider);
 registry.register(chunkingProvider);
 registry.register(comprehensionProvider);
 registry.register(subvocalizationProvider);
-// Phase 4+: memorization / retention ...
+registry.register(memorizationProvider);
 
 export const engine = new Engine(registry);
 export { registry };

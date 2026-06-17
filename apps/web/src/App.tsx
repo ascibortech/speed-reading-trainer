@@ -11,11 +11,12 @@ import { SessionRunner } from "./components/SessionRunner.js";
 import { ProgressView } from "./components/ProgressView.js";
 import { ExportImport } from "./components/ExportImport.js";
 import { ExamPanel } from "./exam/ExamPanel.js";
+import { ReviewPanel } from "./review/ReviewPanel.js";
 import { Changelog } from "./components/Changelog.js";
 import { LanguageFlags, useT } from "./i18n/index.js";
 import { APP_VERSION } from "./changelog.js";
 
-type Tab = "train" | "exam" | "progress";
+type Tab = "train" | "exam" | "review" | "progress";
 
 export function App() {
   const t = useT();
@@ -122,6 +123,12 @@ export function App() {
           {t("nav.exam")}
         </button>
         <button
+          className={tab === "review" ? "active" : ""}
+          onClick={() => setTab("review")}
+        >
+          {t("nav.review")}
+        </button>
+        <button
           className={tab === "progress" ? "active" : ""}
           onClick={() => setTab("progress")}
         >
@@ -213,6 +220,8 @@ export function App() {
         )}
 
         {tab === "exam" && <ExamPanel username={username} />}
+
+        {tab === "review" && <ReviewPanel username={username} />}
 
         {tab === "progress" && (
           <ProgressView sessions={sessions} totalExercises={descriptors.length} />

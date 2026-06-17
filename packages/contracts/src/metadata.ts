@@ -68,6 +68,25 @@ export interface ProgressProfile {
   completion: Record<string, number>;
 }
 
+/**
+ * A spaced-repetition review item (system-design §5.1). Tracks the schedule and
+ * recall decay for one memorized passage. Stores a user-chosen LABEL — never the
+ * text and never a hash of it. The decay curve is the `history` of scores.
+ */
+export interface ReviewItem {
+  reviewId: string;
+  username: string;
+  /** User-chosen name for the passage (not the text). */
+  label: string;
+  createdAt: string;
+  /** Index into the spaced-repetition interval ladder. */
+  intervalIndex: number;
+  /** ISO timestamp the next review becomes due. */
+  dueAt: string;
+  /** Recall decay points, oldest first. */
+  history: { date: string; recallPct: number; intervalDays: number }[];
+}
+
 /** A local profile. The passphrase is a soft local lock, NOT access control. */
 export interface Profile {
   username: string;
@@ -90,5 +109,6 @@ export interface ProgressExport {
   profile: Omit<Profile, "passphraseHash">;
   sessions: SessionMetadata[];
   examRuns: ExamRun[];
+  reviews?: ReviewItem[];
   progress?: ProgressProfile;
 }

@@ -71,6 +71,9 @@ importers:
       '@srt/exercise-comprehension':
         specifier: workspace:*
         version: link:../../packages/exercise-comprehension
+      '@srt/exercise-memorization':
+        specifier: workspace:*
+        version: link:../../packages/exercise-memorization
       '@srt/exercise-pointer':
         specifier: workspace:*
         version: link:../../packages/exercise-pointer
@@ -86,6 +89,9 @@ importers:
       '@srt/parsers':
         specifier: workspace:*
         version: link:../../packages/parsers
+      '@srt/spaced-repetition':
+        specifier: workspace:*
+        version: link:../../packages/spaced-repetition
       '@srt/storage':
         specifier: workspace:*
         version: link:../../packages/storage
@@ -134,6 +140,15 @@ importers:
         specifier: workspace:*
         version: link:../contracts
 
+  packages/exercise-memorization:
+    dependencies:
+      '@srt/comprehension':
+        specifier: workspace:*
+        version: link:../comprehension
+      '@srt/contracts':
+        specifier: workspace:*
+        version: link:../contracts
+
   packages/exercise-pointer:
     dependencies:
       '@srt/contracts':
@@ -166,6 +181,12 @@ importers:
       pdfjs-dist:
         specifier: ^4.10.38
         version: 4.10.38
+
+  packages/spaced-repetition:
+    dependencies:
+      '@srt/contracts':
+        specifier: workspace:*
+        version: link:../contracts
 
   packages/storage:
     dependencies:

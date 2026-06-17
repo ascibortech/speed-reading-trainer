@@ -29,8 +29,12 @@ generation; the **comprehension**, **chunking**, and **subvocalization** exercis
 choice persisted to `localStorage`), plus in-app **versioning + changelog**
 (`apps/web/src/changelog.ts`, shown from the footer). Exercises localize their own
 DOM strings through `ctx.t(key, englishFallback)` on the Exercise contract. CI/CD +
-CodeQL + Dependabot wired. **Phase 4 (memorization / retention + spaced repetition)
-is the next step.**
+CodeQL + Dependabot wired. **Phase 4 ✓** added the **memorization / retention**
+exercise (free / cued / sequence recall, scored in-memory) and a **spaced-repetition
+Review tab** (curated re-test schedule with a recall-decay chart), backed by a new
+`reviews` IndexedDB store (DB v2) — recalled text is never persisted. **Phase 5
+(`.docx`/`.epub`/`.mobi`, hardening, optional in-browser LLM, a11y) is the next
+step.**
 
 ## The three non-negotiables
 
@@ -133,7 +137,7 @@ Each phase is a GitHub Milestone; exit criteria gate the next. (Full detail in
   engine core + **Pointer/Pacer exercise**. Ships a usable standalone product.
 - **Phase 2** ✓ — lazy `.pdf` parser (pdf.js), RSVP, Schulte, progress profile view.
 - **Phase 3** ✓ — exam path + comprehension (cloze) + chunking + subvocalization.
-- **Phase 4** — memorization/retention + spaced repetition.
+- **Phase 4** ✓ — memorization/retention + spaced repetition.
 - **Phase 5** — `.docx`/`.epub`/`.mobi`, hardening, optional in-browser LLM, a11y.
 - **Phase 6 (stretch)** — webcam eye-tracking as an engine capability.
 

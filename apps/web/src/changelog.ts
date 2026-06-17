@@ -3,7 +3,7 @@
  * in-app changelog (bilingual). Bump APP_VERSION and prepend an entry on each
  * user-facing release. Newest first.
  */
-export const APP_VERSION = "0.4.0";
+export const APP_VERSION = "0.5.0";
 
 export interface ChangelogEntry {
   version: string;
@@ -13,6 +13,20 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "0.5.0",
+    date: "2026-06-16",
+    en: [
+      "New Memorization exercise: free recall, fill-the-blanks, and reorder modes.",
+      "Review tab: memorize a passage and re-test it at expanding intervals.",
+      "Recall decay is charted over time for each saved passage.",
+    ],
+    pl: [
+      "Nowe ćwiczenie Zapamiętywanie: swobodne odtwarzanie, uzupełnianie luk i układanie.",
+      "Zakładka Powtórki: zapamiętaj fragment i powtarzaj go w rosnących odstępach.",
+      "Zanik pamięci jest pokazywany na wykresie w czasie dla każdego fragmentu.",
+    ],
+  },
   {
     version: "0.4.0",
     date: "2026-06-16",

@@ -1,0 +1,17 @@
+{
+  "name": "@srt/exercise-memorization",
+  "version": "0.5.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@srt/contracts": "workspace:*",
+    "@srt/comprehension": "workspace:*"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  }
+}
