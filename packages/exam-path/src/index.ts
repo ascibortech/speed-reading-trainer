@@ -7,8 +7,8 @@
 import type { ExamRun, PassageDifficulty } from "@srt/contracts/metadata";
 import { EXAM_PASSAGES, type ExamPassage } from "./passages.js";
 
-export { EXAM_PASSAGES } from "./passages.js";
-export type { ExamPassage } from "./passages.js";
+export { EXAM_PASSAGES, getExamPassages } from "./passages.js";
+export type { ExamPassage, PassageLang } from "./passages.js";
 
 /** Recommended re-test cadence (kickoff §7). */
 export const RETEST_MIN_DAYS = 28;

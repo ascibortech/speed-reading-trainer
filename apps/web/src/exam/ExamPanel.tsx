@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { ExamRun } from "@srt/contracts/metadata";
 import { addExamRun, getExamRuns } from "@srt/storage";
 import {
   buildExamRun,
   daysSinceLastExam,
-  EXAM_PASSAGES,
+  getExamPassages,
   isRetestDue,
   passageWordCount,
   RETEST_MIN_DAYS,
@@ -12,7 +12,7 @@ import {
   type PassageResult,
 } from "@srt/exam-path";
 import { scoreAnswers, type AnsweredQuestion } from "@srt/comprehension";
-import { useT, type Translate } from "../i18n/index.js";
+import { useI18n, type Translate } from "../i18n/index.js";
 
 interface Props {
   username: string;
@@ -27,7 +27,9 @@ type Mode = "idle" | "running" | "summary";
  * speed × comprehension trajectory over time.
  */
 export function ExamPanel({ username }: Props) {
-  const t = useT();
+  const { t, lang } = useI18n();
+  // Exam passages read in the active UI language (fall back to English).
+  const passages = useMemo(() => getExamPassages(lang), [lang]);
   const [runs, setRuns] = useState<ExamRun[]>([]);
   const [mode, setMode] = useState<Mode>("idle");
   const [index, setIndex] = useState(0);
@@ -56,7 +58,7 @@ export function ExamPanel({ username }: Props) {
 
   async function onPassageDone(result: PassageResult) {
     const next = [...results, result];
-    if (index + 1 < EXAM_PASSAGES.length) {
+    if (index + 1 < passages.length) {
       setResults(next);
       setIndex(index + 1);
       return;
@@ -80,14 +82,14 @@ export function ExamPanel({ username }: Props) {
         <p className="muted small">
           {t("exam.passageOf", undefined, {
             n: index + 1,
-            total: EXAM_PASSAGES.length,
+            total: passages.length,
           })}
         </p>
         <PassageStep
-          key={index}
-          passage={EXAM_PASSAGES[index]}
+          key={`${lang}-${index}`}
+          passage={passages[index]}
           n={index + 1}
-          total={EXAM_PASSAGES.length}
+          total={passages.length}
           t={t}
           onDone={onPassageDone}
         />
@@ -120,7 +122,7 @@ export function ExamPanel({ username }: Props) {
 
       {!hasBaseline ? (
         <button className="primary big" onClick={start}>
-          {t("exam.startBaseline", undefined, { n: EXAM_PASSAGES.length })}
+          {t("exam.startBaseline", undefined, { n: passages.length })}
         </button>
       ) : (
         <>

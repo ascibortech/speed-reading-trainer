@@ -5,11 +5,17 @@
  * apples. Questions are hand-authored across the three diagnostic types
  * (factual MC, cloze, inference — kickoff §6.6).
  *
+ * Each passage is provided in every supported UI language so the exam reads in
+ * the language the user picked (EN / PL). `getExamPassages(lang)` returns the set
+ * for a language, falling back to English.
+ *
  * NB: kept to ~130 words each for a usable demo; the kickoff's ~1000-word
  * baseline can be slotted in later without any code change.
  */
 import type { PassageDifficulty } from "@srt/contracts/metadata";
 import type { Question } from "@srt/comprehension";
+
+export type PassageLang = "en" | "pl";
 
 export interface ExamPassage {
   id: string;
@@ -26,7 +32,7 @@ const COMMON_DIFFICULTY: PassageDifficulty = {
   conceptualAbstraction: 4,
 };
 
-export const EXAM_PASSAGES: ExamPassage[] = [
+const EN: ExamPassage[] = [
   {
     id: "bees",
     title: "How Bees Navigate",
@@ -179,3 +185,166 @@ export const EXAM_PASSAGES: ExamPassage[] = [
     ],
   },
 ];
+
+const PL: ExamPassage[] = [
+  {
+    id: "bees",
+    title: "Jak pszczoły nawigują",
+    text: "Pszczoły miodne pokonują zaskakujące odległości w poszukiwaniu nektaru, czasem oddalając się o kilka kilometrów od ula. Aby trafić z powrotem, kierują się położeniem słońca, które śledzą nawet w pochmurne dni, odczytując wzory światła spolaryzowanego na niebie. Gdy robotnica znajdzie bogate źródło pożywienia, wraca i wykonuje na plastrze taniec wywijany. Kąt tańca względem pionu koduje kierunek pożywienia względem słońca, a czas trwania wywijania sygnalizuje odległość. Inne pszczoły uważnie śledzą tancerkę, a potem ruszają we wskazanym kierunku. Ta niezwykła forma komunikacji pozwala rodzinie dzielić się dokładnymi informacjami nawigacyjnymi bez żadnego dźwięku, dzięki czemu tysiące robotnic może sprawnie korzystać z tej samej kwitnącej łąki.",
+    difficulty: COMMON_DIFFICULTY,
+    questions: [
+      {
+        id: "bees-q1",
+        type: "mc",
+        prompt: "Jak pszczoły śledzą słońce w pochmurne dni?",
+        options: [
+          "Odczytując światło spolaryzowane na niebie",
+          "Kierując się punktami na ziemi",
+          "Słuchając innych pszczół",
+          "Wyczuwając zmiany temperatury",
+        ],
+        answerIndex: 0,
+      },
+      {
+        id: "bees-q2",
+        type: "mc",
+        prompt: "Co sygnalizuje czas trwania wywijania?",
+        options: [
+          "Odległość do pożywienia",
+          "Rodzaj kwiatu",
+          "Liczbę potrzebnych pszczół",
+          "Porę dnia",
+        ],
+        answerIndex: 0,
+      },
+      {
+        id: "bees-q3",
+        type: "cloze",
+        prompt:
+          "Kąt tańca względem pionu koduje _____ pożywienia względem słońca.",
+        options: ["kierunek", "kolor", "wagę", "świeżość"],
+        answerIndex: 0,
+      },
+      {
+        id: "bees-q4",
+        type: "inference",
+        prompt: "Co możemy wywnioskować o komunikacji pszczół?",
+        options: [
+          "Przekazuje dokładne informacje bez dźwięku",
+          "Działa tylko nocą",
+          "Wymaga zgody królowej",
+          "Jest zawodna na duże odległości",
+        ],
+        answerIndex: 0,
+      },
+    ],
+  },
+  {
+    id: "lighthouse",
+    title: "Praca latarni morskich",
+    text: "Od wieków latarnie morskie strzegą niebezpiecznych wybrzeży, ostrzegając statki przed skałami i prowadząc je bezpiecznie do portu. Wczesne wieże paliły węgiel lub drewno w otwartym ogniu, ale dawał on słabe i zawodne światło przy złej pogodzie. Przełom przyniosła soczewka Fresnela — pierścień szklanych pryzmatów, który zbiera rozproszone światło i skupia je w jedną silną wiązkę. Dzięki niej nawet skromna lampa była widoczna daleko na morzu. Każda latarnia błyska w odrębnym rytmie, zwanym jej charakterem, aby żeglarz mógł rozpoznać, którą latarnię widzi, i ustalić pozycję statku. Dziś większość latarni jest zautomatyzowana i zasilana elektrycznie, lecz ich podstawowy cel pozostaje ten sam: zamienić stały punkt światła w niezawodny komunikat o tym, gdzie czyha niebezpieczeństwo.",
+    difficulty: COMMON_DIFFICULTY,
+    questions: [
+      {
+        id: "lighthouse-q1",
+        type: "mc",
+        prompt: "Jaki problem miały wczesne ognie z węgla lub drewna?",
+        options: [
+          "Dawały słabe i zawodne światło przy złej pogodzie",
+          "Były zbyt drogie w budowie",
+          "Przyciągały zbyt wiele statków",
+          "Były nielegalne w większości portów",
+        ],
+        answerIndex: 0,
+      },
+      {
+        id: "lighthouse-q2",
+        type: "cloze",
+        prompt: "Soczewka Fresnela skupia rozproszone światło w jedną silną _____.",
+        options: ["wiązkę", "cień", "barwę", "melodię"],
+        answerIndex: 0,
+      },
+      {
+        id: "lighthouse-q3",
+        type: "mc",
+        prompt: "Dlaczego każda latarnia błyska w odrębnym rytmie?",
+        options: [
+          "Aby żeglarze rozpoznali, która to latarnia",
+          "Aby oszczędzać prąd",
+          "Aby uczcić lokalne święta",
+          "Aby odstraszać ptaki morskie",
+        ],
+        answerIndex: 0,
+      },
+      {
+        id: "lighthouse-q4",
+        type: "inference",
+        prompt: "Jaka jest główna myśl fragmentu o latarniach?",
+        options: [
+          "Ich cel trwa mimo zmian technologii",
+          "Nie są już nigdzie używane",
+          "Były nieudanym eksperymentem",
+          "Działają tylko na spokojnym morzu",
+        ],
+        answerIndex: 0,
+      },
+    ],
+  },
+  {
+    id: "glaciers",
+    title: "Rzeki lodu",
+    text: "Lodowiec często opisuje się jako rzekę lodu i porównanie to jest trafne. Śnieg, który spada wysoko w górach, nie topnieje całkowicie latem; rok po roku narasta, a jego własny ciężar sprasowuje dolne warstwy w gęsty lód. Gdy lód zgrubieje wystarczająco, grawitacja wprawia go w powolny ruch w dół, czasem zaledwie o kilka centymetrów dziennie. Pełznąc, lodowiec szlifuje skałę pod sobą, żłobiąc szerokie doliny i unosząc ogromne ilości gruzu. Gdy lód dociera w końcu na cieplejsze wysokości, topnieje, uwalniając ten rumosz w postaci długich wałów. Wiele z dramatycznych górskich krajobrazów, które dziś podziwiamy, ukształtowały lodowce, które od tamtej pory zniknęły, pozostawiając swój ślad w krajobrazie długo po tym, jak sam lód przepadł.",
+    difficulty: COMMON_DIFFICULTY,
+    questions: [
+      {
+        id: "glaciers-q1",
+        type: "mc",
+        prompt: "Co zamienia dolne warstwy śniegu w gęsty lód?",
+        options: [
+          "Ciężar śniegu powyżej",
+          "Opady deszczu zimą",
+          "Wiatr z doliny",
+          "Ciepło skały",
+        ],
+        answerIndex: 0,
+      },
+      {
+        id: "glaciers-q2",
+        type: "cloze",
+        prompt:
+          "Pełznąc, lodowiec szlifuje skałę pod sobą, żłobiąc szerokie _____.",
+        options: ["doliny", "jeziora", "lasy", "chmury"],
+        answerIndex: 0,
+      },
+      {
+        id: "glaciers-q3",
+        type: "mc",
+        prompt: "Co wprawia gruby lód w ruch w dół?",
+        options: ["Grawitacja", "Trzęsienia ziemi", "Pływy oceanu", "Światło słoneczne"],
+        answerIndex: 0,
+      },
+      {
+        id: "glaciers-q4",
+        type: "inference",
+        prompt: "Co możemy wywnioskować o wielu dzisiejszych górskich krajobrazach?",
+        options: [
+          "Ukształtowały je lodowce, które już zniknęły",
+          "Są całkowicie sztuczne",
+          "Powstały w jedną zimę",
+          "Lód nie ma na nie wpływu",
+        ],
+        answerIndex: 0,
+      },
+    ],
+  },
+];
+
+const BY_LANG: Record<PassageLang, ExamPassage[]> = { en: EN, pl: PL };
+
+/** Default (English) passage set — kept for back-compat and tests. */
+export const EXAM_PASSAGES = EN;
+
+/** Passages in the requested UI language, falling back to English. */
+export function getExamPassages(lang: string): ExamPassage[] {
+  return BY_LANG[lang as PassageLang] ?? EN;
+}
