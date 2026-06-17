@@ -1,6 +1,6 @@
 {
   "name": "@srt/web",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -17,11 +17,13 @@
     "@srt/exam-path": "workspace:*",
     "@srt/exercise-chunking": "workspace:*",
     "@srt/exercise-comprehension": "workspace:*",
+    "@srt/exercise-memorization": "workspace:*",
     "@srt/exercise-pointer": "workspace:*",
     "@srt/exercise-rsvp": "workspace:*",
     "@srt/exercise-schulte": "workspace:*",
     "@srt/exercise-subvocalization": "workspace:*",
     "@srt/parsers": "workspace:*",
+    "@srt/spaced-repetition": "workspace:*",
     "@srt/storage": "workspace:*",
     "react": "^19.2.0",
     "react-dom": "^19.2.7"

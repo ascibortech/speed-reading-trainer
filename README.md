@@ -19,7 +19,7 @@ See [`/docs`](./docs):
 
 ## Status
 
-Phases 0–3 implemented: a pnpm + Turborepo monorepo with the engine core, plugin registry, IndexedDB storage + JSON export/import, `.txt` and `.pdf` parsing, **six exercises** (Pointer, RSVP, Schulte, Chunking, Comprehension, Subvocalization — all four pedagogical pillars), client-side comprehension question generation, and the **exam path** benchmark (curated passages → baseline + re-test trajectory). Phase 4 (memorization / retention) is next.
+Phases 0–4 implemented: a pnpm + Turborepo monorepo with the engine core, plugin registry, IndexedDB storage + JSON export/import, `.txt` and `.pdf` parsing, **seven exercises** (Pointer, RSVP, Schulte, Chunking, Comprehension, Subvocalization, Memorization — all five pedagogical pillars), client-side comprehension question generation, the **exam path** benchmark (curated passages → baseline + re-test trajectory), a **spaced-repetition Review** tab with recall-decay charting, and a bilingual EN/PL UI. Phase 5 (`.docx`/`.epub`/`.mobi`, hardening, a11y) is next.
 
 ### Develop
 

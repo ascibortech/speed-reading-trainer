@@ -20,6 +20,7 @@ const en: Dict = {
   // nav / header / footer
   "nav.train": "Train",
   "nav.exam": "Exam",
+  "nav.review": "Review",
   "nav.progress": "Progress",
   "header.export": "⭳ Export my progress",
   "header.import": "⭱ Import",
@@ -152,6 +153,9 @@ const en: Dict = {
   "ex.subvocalization.title": "Subvocalization",
   "ex.subvocalization.desc":
     "Read once normally, then again while occupying your inner voice — measures the speed gain.",
+  "ex.memorization.title": "Memorization",
+  "ex.memorization.desc":
+    "Study a passage, then reconstruct it from memory — trains retention, the fifth pillar.",
 
   // param labels / units / options
   "param.linesPerSec": "Pace",
@@ -169,11 +173,20 @@ const en: Dict = {
   "opt.technique.count": "Silent counting (1-2-3-4)",
   "opt.technique.hum": "Humming",
   "opt.technique.tap": "Rhythmic tapping",
+  "param.mode": "Recall mode",
+  "opt.mode.free": "Free recall",
+  "opt.mode.cued": "Cued (fill the blanks)",
+  "opt.mode.sequence": "Reorder sentences",
+  "opt.technique.none": "None",
+  "opt.technique.chunk": "Chunk & associate",
+  "opt.technique.loci": "Method of loci",
+  "opt.technique.keyword": "Keyword imaging",
 };
 
 const pl: Dict = {
   "nav.train": "Trenuj",
   "nav.exam": "Egzamin",
+  "nav.review": "Powtórki",
   "nav.progress": "Postępy",
   "header.export": "⭳ Eksportuj postępy",
   "header.import": "⭱ Importuj",
@@ -298,6 +311,47 @@ const pl: Dict = {
   "ex.subvocalization.title": "Subwokalizacja",
   "ex.subvocalization.desc":
     "Przeczytaj raz normalnie, a potem zajmując wewnętrzny głos — mierzy przyrost szybkości.",
+  "ex.memorization.title": "Zapamiętywanie",
+  "ex.memorization.desc":
+    "Przeczytaj fragment, a potem odtwórz go z pamięci — trenuje retencję, piąty filar.",
+  "param.mode": "Tryb odtwarzania",
+  "opt.mode.free": "Swobodne odtwarzanie",
+  "opt.mode.cued": "Z podpowiedzią (uzupełnij luki)",
+  "opt.mode.sequence": "Ułóż zdania",
+  "opt.technique.none": "Brak",
+  "opt.technique.chunk": "Grupuj i kojarz",
+  "opt.technique.loci": "Metoda miejsc (loci)",
+  "opt.technique.keyword": "Obrazy słów kluczy",
+
+  // review (spaced repetition)
+  "rev.heading": "Zapamiętuj i powtarzaj",
+  "rev.intro":
+    "Zapamiętaj fragment, a potem powtarzaj go w rosnących odstępach, by sprawdzić, co zostaje.",
+  "rev.empty": "Brak pozycji do powtórek.",
+  "rev.add": "Nowa pozycja do powtórki",
+  "rev.newTitle": "Nowa pozycja do powtórki",
+  "rev.reviewTitle": "Powtórka: {label}",
+  "rev.label": "Nazwij ten fragment",
+  "rev.start": "Zacznij zapamiętywanie",
+  "rev.back": "Wstecz",
+  "rev.due": "Do powtórki teraz",
+  "rev.dueIn": "Za {days} dni",
+  "rev.lastRecall": "ostatnio {pct}%",
+  "rev.reviews": "{n} powtórek",
+  "rev.reviewNow": "Powtórz",
+
+  // memorization exercise (rendered inside the package)
+  "mem.study": "Przeczytaj ten fragment",
+  "mem.done": "Ukryj i odtwórz",
+  "mem.freePrompt": "Wpisz wszystko, co pamiętasz",
+  "mem.cuedPrompt": "Uzupełnij luki z pamięci",
+  "mem.seqPrompt": "Klikaj zdania w ich pierwotnej kolejności",
+  "mem.score": "Oceń odtworzenie",
+  "mem.result": "Odtworzenie: {pct}%",
+  "mem.finish": "Zakończ i zapisz",
+  "mem.hint.chunk": "Pogrupuj myśli w kilka części i połącz je podczas czytania.",
+  "mem.hint.loci": "Umieść każdą myśl w punkcie znanej trasy (metoda miejsc).",
+  "mem.hint.keyword": "Zamieniaj kluczowe myśli w wyraziste obrazy podczas czytania.",
 
   "param.linesPerSec": "Tempo",
   "param.marginWords": "Margines krawędzi",

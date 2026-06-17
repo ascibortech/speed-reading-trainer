@@ -10,13 +10,14 @@
  *  └─ progressIndex   keyPath username   { sessionIds[], examRunIds[] }
  */
 export const DB_NAME = "speed-reading-trainer";
-export const DB_VERSION = 1;
+export const DB_VERSION = 2;
 
 export const STORE = {
   profiles: "profiles",
   sessions: "sessions",
   examRuns: "examRuns",
   progressIndex: "progressIndex",
+  reviews: "reviews",
 } as const;
 
 let dbPromise: Promise<IDBDatabase> | null = null;
@@ -40,6 +41,11 @@ export function openDb(): Promise<IDBDatabase> {
       }
       if (!db.objectStoreNames.contains(STORE.progressIndex)) {
         db.createObjectStore(STORE.progressIndex, { keyPath: "username" });
+      }
+      // v2: spaced-repetition review items.
+      if (!db.objectStoreNames.contains(STORE.reviews)) {
+        const s = db.createObjectStore(STORE.reviews, { keyPath: "reviewId" });
+        s.createIndex("by-username", "username", { unique: false });
       }
     };
     req.onsuccess = () => resolve(req.result);

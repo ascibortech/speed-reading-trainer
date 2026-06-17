@@ -12,6 +12,7 @@ import {
   type ExamRun,
   type Profile,
   type ProgressExport,
+  type ReviewItem,
   type SessionMetadata,
 } from "@srt/contracts/metadata";
 import { STORE, get, getAll, getAllByIndex, put, writeMany } from "./db.js";
@@ -142,15 +143,27 @@ export async function getExamRuns(username: string): Promise<ExamRun[]> {
   return rows.sort((a, b) => a.date.localeCompare(b.date));
 }
 
+// ── Review items (spaced repetition, §5.1) ───────────────────────────────────
+
+export async function addReview(review: ReviewItem): Promise<void> {
+  await put(STORE.reviews, review);
+}
+
+export async function getReviews(username: string): Promise<ReviewItem[]> {
+  const rows = await getAllByIndex<ReviewItem>(STORE.reviews, "by-username", username);
+  return rows.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+}
+
 // ── Export / Import (ADR-003) ─────────────────────────────────────────────────
 
 /** Build the portable, metadata-only export document for a profile. */
 export async function exportProgress(username: string): Promise<ProgressExport> {
   const profile = await getProfile(username);
   if (!profile) throw new Error(`Unknown profile: ${username}`);
-  const [sessions, examRuns] = await Promise.all([
+  const [sessions, examRuns, reviews] = await Promise.all([
     getSessions(username),
     getExamRuns(username),
+    getReviews(username),
   ]);
   return {
     schemaVersion: EXPORT_SCHEMA_VERSION,
@@ -158,6 +171,7 @@ export async function exportProgress(username: string): Promise<ProgressExport> 
     profile: { username: profile.username, createdAt: profile.createdAt },
     sessions,
     examRuns,
+    reviews,
   };
 }
 
@@ -188,5 +202,6 @@ export async function importProgress(doc: ProgressExport): Promise<Profile> {
 
   for (const s of doc.sessions) await addSession({ ...s, username });
   for (const r of doc.examRuns) await addExamRun({ ...r, username });
+  for (const rv of doc.reviews ?? []) await addReview({ ...rv, username });
   return profile;
 }
