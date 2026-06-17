@@ -3,6 +3,7 @@ import {
   buildExamRun,
   daysSinceLastExam,
   EXAM_PASSAGES,
+  getExamPassages,
   isRetestDue,
   passageWordCount,
 } from "./index.js";
@@ -17,6 +18,22 @@ describe("exam passages", () => {
       }
       expect(passageWordCount(p)).toBeGreaterThan(100);
     }
+  });
+
+  it("provides a full Polish set with the same ids and translated text", () => {
+    const en = getExamPassages("en");
+    const pl = getExamPassages("pl");
+    expect(pl.map((p) => p.id)).toEqual(en.map((p) => p.id));
+    for (let i = 0; i < pl.length; i++) {
+      expect(pl[i].title).not.toBe(en[i].title); // actually translated
+      expect(pl[i].text).not.toBe(en[i].text);
+      expect(pl[i].questions).toHaveLength(en[i].questions.length);
+      for (const q of pl[i].questions) expect(q.options[q.answerIndex]).toBeTruthy();
+    }
+  });
+
+  it("falls back to English for an unknown language", () => {
+    expect(getExamPassages("de")).toBe(getExamPassages("en"));
   });
 });
 
